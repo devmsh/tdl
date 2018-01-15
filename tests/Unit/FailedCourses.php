@@ -2,6 +2,10 @@
 
 namespace Tests\Unit;
 
+use App\Course;
+use App\Interest;
+use App\Timeslot;
+use App\Trainer;
 use Carbon\Carbon;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -30,7 +34,7 @@ class FailedCourses extends TestCase
             'to_time' => '6',
         ]);
 
-        $interest = factory(Interest::calss)->create([
+        $interest = factory(Interest::class)->create([
             'course_id' => $course->id,
             'timeslot_id' => $timeslot->id,
             'real_candidates' => 9,
