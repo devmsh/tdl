@@ -7,12 +7,15 @@ use App\Interest;
 use App\Timeslot;
 use App\Trainer;
 use Carbon\Carbon;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class FailedCourses extends TestCase
 {
+    use DatabaseMigrations;
+
     /**
      * Based on https://github.com/devmsh/tdl/issues/2
      * Scenario 1
