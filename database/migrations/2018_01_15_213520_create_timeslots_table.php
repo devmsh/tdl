@@ -15,11 +15,7 @@ class CreateTimeslotsTable extends Migration
     {
         Schema::create('timeslots', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('trainer_id');
             $table->timestamp('start_date');
-            $table->string('weekdays');
-            $table->time('from_time');
-            $table->time('to_time');
             $table->timestamps();
         });
     }

@@ -17,7 +17,6 @@ class CreateInterestsTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('course_id');
             $table->unsignedInteger('timeslot_id');
-            $table->unsignedInteger('real_candidates');
             $table->timestamps();
         });
     }

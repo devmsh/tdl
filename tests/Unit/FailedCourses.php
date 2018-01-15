@@ -4,13 +4,12 @@ namespace Tests\Unit;
 
 use App\Course;
 use App\Interest;
+use App\Notifications\DeadlineExceededNotification;
 use App\Timeslot;
-use App\Trainer;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Support\Facades\Notification;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class FailedCourses extends TestCase
 {
@@ -20,29 +19,25 @@ class FailedCourses extends TestCase
      * Based on https://github.com/devmsh/tdl/issues/2
      * Scenario 1
      */
-    public function test_system_send_notification_when_fail()
+    public function test_system_send_notification_when_exceed_deadline()
     {
-        $trainer = factory(Trainer::class)->create();
-
         $course = factory(Course::class)->create([
-            'trainer_id' => $trainer->id,
-            'min_candidates' => 10,
+            'min_candidates' => 10
         ]);
 
         $timeslot = factory(Timeslot::class)->create([
-            'trainer_id' => $trainer->id,
-            'start_date' => Carbon::now(),
-            'weekdays' => 's,t,m',
-            'from_time' => '3',
-            'to_time' => '6',
+            'start_date' => Carbon::now()->addDays(Timeslot::VALIDATE_BEFORE)
         ]);
 
-        $interest = factory(Interest::class)->create([
+        factory(Interest::class, 9)->create([
             'course_id' => $course->id,
-            'timeslot_id' => $timeslot->id,
-            'real_candidates' => 9,
+            'timeslot_id' => $timeslot->id
         ]);
 
-        $timeslot->valide();
+        Notification::fake();
+
+        Timeslot::first()->validate();
+
+        Notification::assertSentTo($course, DeadlineExceededNotification::class);
     }
 }
