@@ -40,4 +40,26 @@ class FailedCourses extends TestCase
 
         Notification::assertSentTo($course, DeadlineExceededNotification::class);
     }
+
+    public function test_system_not_send_notification_when_not_exceed_deadline()
+    {
+        $course = factory(Course::class)->create([
+            'min_candidates' => 10
+        ]);
+
+        $timeslot = factory(Timeslot::class)->create([
+            'start_date' => Carbon::yesterday()
+        ]);
+
+        factory(Interest::class, 9)->create([
+            'course_id' => $course->id,
+            'timeslot_id' => $timeslot->id
+        ]);
+
+        Notification::fake();
+
+        Timeslot::first()->validate();
+
+        Notification::assertNotSentTo($course, DeadlineExceededNotification::class);
+    }
 }

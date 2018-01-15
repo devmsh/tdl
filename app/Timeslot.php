@@ -26,8 +26,15 @@ class Timeslot extends Model
         return $this->hasMany(Interest::class);
     }
 
+    public function isExceedDeadline()
+    {
+        return Carbon::now()->diffInDays($this->start_date,false) >= 7;
+    }
+
     public function validate()
     {
+        if(!$this->isExceedDeadline())return;
+
         foreach ($this->courses as $course){
 
             $real_candidates_count = Interest::where('course_id', $course->id)
