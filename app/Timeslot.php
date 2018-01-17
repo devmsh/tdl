@@ -36,13 +36,18 @@ class Timeslot extends Model
         if(!$this->isExceedDeadline())return;
 
         foreach ($this->courses as $course){
-
             $real_candidates_count = Interest::where('course_id', $course->id)
                 ->where('course_id', $course->id)
                 ->count();
 
             if($real_candidates_count < $course->min_candidates){
-                Course::first()->notify(new DeadlineExceededNotification());
+                $interests = Interest::where('course_id', $course->id)
+                    ->where('course_id', $course->id)
+                    ->get();
+
+                $interests->each(function ($interest){
+                    $interest->notify(new DeadlineExceededNotification());
+                });
             }
         }
 

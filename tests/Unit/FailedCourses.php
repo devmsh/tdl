@@ -50,10 +50,15 @@ class FailedCourses extends TestCase
             9
         );
 
-        Timeslot::first()->validate();
+        $this->timeslot->validate();
 
-        Notification::assertSentTo($this->course, DeadlineExceededNotification::class);
+        Notification::assertSentTo(Interest::all(), DeadlineExceededNotification::class);
     }
+
+
+
+
+
 
     public function test_system_not_send_notification_when_not_exceed_deadline()
     {

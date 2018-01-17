@@ -7,5 +7,4 @@ use Illuminate\Notifications\Notifiable;
 
 class Course extends Model
 {
-    use Notifiable;
 }
