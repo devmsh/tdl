@@ -14,25 +14,5 @@ use Illuminate\Contracts\Console\Kernel;
  */
 class FeatureContext extends MinkContext implements Context
 {
-    var $app;
 
-    /**
-     * Initializes context.
-     *
-     * Every scenario gets its own context instance.
-     * You can also pass arbitrary arguments to the
-     * context constructor through behat.yml.
-     */
-    public function __construct()
-    {
-        $app = require __DIR__.'/../../bootstrap/app.php';
-
-        $app->make(Kernel::class)->bootstrap();
-
-        Hash::setRounds(4);
-
-        Artisan::call('migrate');
-
-        $this->app = $app;
-    }
 }
