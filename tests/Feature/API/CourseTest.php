@@ -3,6 +3,7 @@
 namespace Tests\Feature\API;
 
 use App\Course;
+use App\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -75,5 +76,47 @@ class CourseTest extends TestCase
                 "created_at"
             ]
         ]);
+    }
+
+    public function test_can_update_my_course()
+    {
+        $trainer = factory(User::class)->create();
+
+        $course = factory(Course::class)->create([
+            'name' => 'PHP Course',
+            'trainer_id' => $trainer->id
+        ]);
+
+        $res = $this->apiActingAs($trainer)->put('api/courses/'.$course->id,[
+            'name' => 'TDD PHP Course',
+        ]);
+
+        $res->assertSuccessful();
+        $this->assertCount(1,Course::all());
+
+        $course = Course::first();
+        $this->assertEquals('TDD PHP Course',$course->name);
+        $res->assertJsonStructure([
+            "data" => [
+                "id",
+                "created_at"
+            ]
+        ]);
+    }
+
+    public function test_can_update_other_trainer_courses()
+    {
+        $trainer = factory(User::class)->create();
+
+        $course = factory(Course::class)->create([
+            'name' => 'PHP Course',
+            'trainer_id' => $trainer->id
+        ]);
+
+        $res = $this->apiActingAs()->put('api/courses/'.$course->id,[
+            'name' => 'TDD PHP Course',
+        ]);
+
+        $res->assertStatus(403);
     }
 }

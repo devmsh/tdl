@@ -2,10 +2,12 @@
 
 namespace App\Http\Requests;
 
+use App\Course;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 
 class CourseRequest extends FormRequest
@@ -17,6 +19,13 @@ class CourseRequest extends FormRequest
      */
     public function authorize()
     {
+        /** @var Course $course */
+        $course = $this->course;
+
+        if($course->exists && $course->trainer_id != Auth::id()){
+            return false;
+        }
+
         return true;
     }
 
@@ -30,6 +39,14 @@ class CourseRequest extends FormRequest
         return [
             'name' => 'required',
         ];
+    }
+
+    protected function failedAuthorization()
+    {
+        throw new HttpResponseException(response()->json(
+            ['errors' => 'no authorization'],
+            JsonResponse::HTTP_FORBIDDEN
+        ));
     }
 
     protected function failedValidation(Validator $validator)

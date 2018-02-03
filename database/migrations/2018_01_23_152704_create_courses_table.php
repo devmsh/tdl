@@ -15,6 +15,7 @@ class CreateCoursesTable extends Migration
     {
         Schema::create('courses', function (Blueprint $table) {
             $table->increments('id');
+            $table->unsignedInteger('trainer_id');
             $table->unsignedInteger('min_candidates')->default(0);
             $table->string('name');
             $table->timestamps();

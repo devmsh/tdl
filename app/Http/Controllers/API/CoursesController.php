@@ -32,9 +32,10 @@ class CoursesController extends Controller
         //
     }
 
-    public function update(Request $request, $id)
+    public function update(CourseRequest $request, Course $course)
     {
-        //
+        $course->update($request->all());
+        return new CourseResource($course->fresh());
     }
 
     public function destroy($id)
