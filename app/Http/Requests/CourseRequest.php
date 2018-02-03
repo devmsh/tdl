@@ -19,13 +19,6 @@ class CourseRequest extends FormRequest
      */
     public function authorize()
     {
-        /** @var Course $course */
-        $course = $this->course;
-
-        if($course->exists && $course->trainer_id != Auth::id()){
-            return false;
-        }
-
         return true;
     }
 
@@ -41,19 +34,15 @@ class CourseRequest extends FormRequest
         ];
     }
 
-    protected function failedAuthorization()
-    {
-        throw new HttpResponseException(response()->json(
-            ['errors' => 'no authorization'],
-            JsonResponse::HTTP_FORBIDDEN
-        ));
-    }
-
     protected function failedValidation(Validator $validator)
     {
-        throw new HttpResponseException(response()->json(
-            ['errors' => $validator->errors()],
-            JsonResponse::HTTP_UNPROCESSABLE_ENTITY
-        ));
+        if($this->isJson()){
+            throw new HttpResponseException(response()->json(
+                ['errors' => $validator->errors()],
+                JsonResponse::HTTP_UNPROCESSABLE_ENTITY
+            ));
+        }else{
+            parent::failedValidation($validator);
+        }
     }
 }

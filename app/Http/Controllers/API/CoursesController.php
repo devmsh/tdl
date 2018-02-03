@@ -12,6 +12,11 @@ use Illuminate\Support\Facades\Validator;
 
 class CoursesController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(Course::class);
+    }
+
     public function index()
     {
         $per_page = config('tdl.per_page');

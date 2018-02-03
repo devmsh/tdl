@@ -17,16 +17,16 @@ class CourseTest extends TestCase
     {
         factory(Course::class,100)->create();
 
-        $res = $this->get('api/courses');
+        $res = $this->json('get','api/courses');
 
-        $res->assertStatus(302);
+        $res->assertStatus(401);
     }
 
     public function test_can_get_courses()
     {
         factory(Course::class,100)->create();
 
-        $res = $this->apiActingAs()->get('api/courses');
+        $res = $this->apiActingAs()->json('get','api/courses');
 
         $res->assertSuccessful();
         $this->assertCount(25, $res->json()['data']);
@@ -50,9 +50,8 @@ class CourseTest extends TestCase
             'name' => null
         ]);
 
-        $res = $this->apiActingAs()->post('api/courses',$course->toArray());
+        $res = $this->apiActingAs()->json('post','api/courses',$course->toArray());
 
-        dd($res->json());
         $res->assertStatus(422);
         $this->assertCount(0,Course::all());
     }
@@ -63,7 +62,7 @@ class CourseTest extends TestCase
             'name' => 'PHP Course'
         ]);
 
-        $res = $this->apiActingAs()->post('api/courses',$course->toArray());
+        $res = $this->apiActingAs()->json('post','api/courses',$course->toArray());
 
         $res->assertSuccessful();
         $this->assertCount(1,Course::all());
@@ -87,7 +86,7 @@ class CourseTest extends TestCase
             'trainer_id' => $trainer->id
         ]);
 
-        $res = $this->apiActingAs($trainer)->put('api/courses/'.$course->id,[
+        $res = $this->apiActingAs($trainer)->json('put','api/courses/'.$course->id,[
             'name' => 'TDD PHP Course',
         ]);
 
@@ -113,7 +112,7 @@ class CourseTest extends TestCase
             'trainer_id' => $trainer->id
         ]);
 
-        $res = $this->apiActingAs()->put('api/courses/'.$course->id,[
+        $res = $this->apiActingAs()->json('put','api/courses/'.$course->id,[
             'name' => 'TDD PHP Course',
         ]);
 
