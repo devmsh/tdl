@@ -12,11 +12,20 @@ class CourseTest extends TestCase
 {
     use DatabaseMigrations;
 
-    public function test_can_get_courses()
+    public function test_user_must_be_authenticated()
     {
         factory(Course::class,100)->create();
 
         $res = $this->get('api/courses');
+
+        $res->assertStatus(302);
+    }
+
+    public function test_can_get_courses()
+    {
+        factory(Course::class,100)->create();
+
+        $res = $this->apiActingAs()->get('api/courses');
 
         $res->assertSuccessful();
         $this->assertCount(25, $res->json()['data']);
@@ -32,13 +41,28 @@ class CourseTest extends TestCase
         ]);
     }
 
+    public function test_course_name_required()
+    {
+        $this->withoutExceptionHandling();
+
+        $course = factory(Course::class)->make([
+            'name' => null
+        ]);
+
+        $res = $this->apiActingAs()->post('api/courses',$course->toArray());
+
+        dd($res->json());
+        $res->assertStatus(422);
+        $this->assertCount(0,Course::all());
+    }
+
     public function test_can_create_course()
     {
         $course = factory(Course::class)->make([
             'name' => 'PHP Course'
         ]);
 
-        $res = $this->post('api/courses',$course->toArray());
+        $res = $this->apiActingAs()->post('api/courses',$course->toArray());
 
         $res->assertSuccessful();
         $this->assertCount(1,Course::all());
@@ -51,17 +75,5 @@ class CourseTest extends TestCase
                 "created_at"
             ]
         ]);
-    }
-
-    public function test_course_name_required()
-    {
-        $course = factory(Course::class)->make([
-            'name' => null
-        ]);
-
-        $res = $this->post('api/courses',$course->toArray());
-
-        $res->assertStatus(422);
-        $this->assertCount(0,Course::all());
     }
 }

@@ -2,8 +2,10 @@
 
 namespace Tests;
 
+use App\User;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
+use Laravel\Passport\Passport;
 
 abstract class TestCase extends BaseTestCase
 {
@@ -21,5 +23,16 @@ abstract class TestCase extends BaseTestCase
 
         $this->assertGreaterThan(0,$filteredEvents->count(),
             "Command $command not scheduled");
+    }
+
+    public function apiActingAs($user = null)
+    {
+        $user = $user ?? factory(User::class)->create();
+        Passport::actingAs(
+            $user,
+            ['*']
+        );
+
+        return $this;
     }
 }
