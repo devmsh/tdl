@@ -25,10 +25,6 @@ class CoursesController extends Controller
 
     public function store(CourseRequest $request)
     {
-//        $request->validate([
-//            'name' => 'required',
-//        ]);
-
         return new CourseResource(Course::create($request->all()));
     }
 

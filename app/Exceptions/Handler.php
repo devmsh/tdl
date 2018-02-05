@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use App\Http\Controllers\API\InvalidPaymentException;
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Validation\ValidationException;

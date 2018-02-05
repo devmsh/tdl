@@ -25,12 +25,12 @@ abstract class TestCase extends BaseTestCase
             "Command $command not scheduled");
     }
 
-    public function apiActingAs($user = null)
+    public function apiActingAs($user = null,$scopes = ['*'])
     {
         $user = $user ?? factory(User::class)->create();
         Passport::actingAs(
             $user,
-            ['*']
+            $scopes
         );
 
         return $this;

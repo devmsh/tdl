@@ -19,6 +19,8 @@ class CourseTest extends TestCase
 
         $res = $this->json('get','api/courses');
 
+        dd($res->json());
+
         $res->assertStatus(401);
     }
 
@@ -44,7 +46,7 @@ class CourseTest extends TestCase
 
     public function test_course_name_required()
     {
-        $this->withoutExceptionHandling();
+//        $this->withoutExceptionHandling();
 
         $course = factory(Course::class)->make([
             'name' => null
@@ -79,6 +81,8 @@ class CourseTest extends TestCase
 
     public function test_can_update_my_course()
     {
+        $this->withoutExceptionHandling();
+
         $trainer = factory(User::class)->create();
 
         $course = factory(Course::class)->create([
@@ -103,7 +107,7 @@ class CourseTest extends TestCase
         ]);
     }
 
-    public function test_can_update_other_trainer_courses()
+    public function test_cannot_update_other_trainer_courses()
     {
         $trainer = factory(User::class)->create();
 

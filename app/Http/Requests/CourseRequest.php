@@ -34,15 +34,15 @@ class CourseRequest extends FormRequest
         ];
     }
 
-    protected function failedValidation(Validator $validator)
-    {
-        if($this->isJson()){
-            throw new HttpResponseException(response()->json(
-                ['errors' => $validator->errors()],
-                JsonResponse::HTTP_UNPROCESSABLE_ENTITY
-            ));
-        }else{
-            parent::failedValidation($validator);
-        }
-    }
+//    protected function failedValidation(Validator $validator)
+//    {
+//        if($this->isJson()){
+//            throw new HttpResponseException(response()->json(
+//                ['code' => 201554, 'errors' => $validator->errors()],
+//                JsonResponse::HTTP_UNPROCESSABLE_ENTITY
+//            ));
+//        }else{
+//            parent::failedValidation($validator);
+//        }
+//    }
 }
