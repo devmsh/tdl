@@ -16,3 +16,4 @@ Route::get('/', function () {
 });
 
 Route::resource('courses','CoursesController');
+Route::get('charge','PaymentController@charge');

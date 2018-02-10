@@ -12,6 +12,7 @@ namespace App\Payment;
 class FakePaymentProvider implements PaymentProviderInterface
 {
     var $charges = [];
+    private $refund_enabled = true;
 
     public function charge(Currency $currency, $source, $notes = null, $additional_data = [])
     {
@@ -31,11 +32,20 @@ class FakePaymentProvider implements PaymentProviderInterface
 
     public function refund($charge_id, Currency $currency, $notes = null, $additional_data = [])
     {
-        return true;
+        if($this->refund_enabled){
+            return true;
+        }else{
+            throw new PaymentProviderNoRefundException();
+        }
     }
 
     public function getRecentCharges()
     {
         return $this->charges;
+    }
+
+    public function disableRefund()
+    {
+        $this->refund_enabled = false;
     }
 }

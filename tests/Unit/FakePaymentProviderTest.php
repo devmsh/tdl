@@ -5,6 +5,7 @@ namespace Tests\Unit;
 use App\Payment\Currency;
 use App\Payment\FakePaymentProvider;
 use App\Payment\PaymentProviderInterface;
+use App\Payment\PaymentProviderNoRefundException;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -54,5 +55,14 @@ class FakePaymentProviderTest extends TestCase
         $result = $provider->refund("charge_id13yi371",new Currency(15,"USD"));
 
         $this->assertTrue($result);
+    }
+
+    public function test_provider_not_offer_refund_process()
+    {
+        $provider = new FakePaymentProvider();
+        $provider->disableRefund();
+
+        $this->expectException(PaymentProviderNoRefundException::class);
+        $result = $provider->refund("charge_id13yi371",new Currency(15,"USD"));
     }
 }
