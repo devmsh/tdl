@@ -1,23 +1,30 @@
 <template>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-8 col-md-offset-2">
-                <div class="panel panel-default">
-                    <div class="panel-heading">Example Component</div>
-
-                    <div class="panel-body">
-                        I'm an example component!
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div>
+        {{count}}
+        <button class="increment" @click="increment">Increment</button>
+        <button class="decrement" @click="decrement">Decrement</button>
     </div>
 </template>
 
 <script>
     export default {
-        mounted() {
-            console.log('Component mounted.')
+        data () {
+            return {
+                count: 0,
+            }
+        },
+        computed: {
+            test: function(){
+                return this.count + 1
+            }
+        },
+        methods: {
+            increment () {
+                this.count++
+            },
+            decrement () {
+                this.count--
+            }
         }
     }
 </script>
