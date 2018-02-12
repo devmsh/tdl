@@ -10,12 +10,10 @@ use Illuminate\Http\Request;
 
 class PaymentController extends Controller
 {
-    public function welcome(Request $request)
+    public function welcome(Request $request, PaymentProviderInterface $provider)
     {
-        $user = Auth::user();
-        User::getNull();
-        // ????
+        var $ch = $provider->charge();
 
-        //$provider->refund("charge_id13yi371",new Currency(15,"USD"));
+        $provider->handelResponse($ch->status_code,new Currency($ch->price));
     }
 }

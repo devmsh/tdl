@@ -9,16 +9,15 @@ use App\Payment\PaymentProviderNoRefundException;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\Traits\CommonPaymentTests;
 
 class FakePaymentProviderTest extends TestCase
 {
-    public function test_is_implement_the_payment_provider_interface()
+    use CommonPaymentTests;
+
+    private function getProvider()
     {
-        $provider = new FakePaymentProvider();
-
-        $interfaces = class_implements($provider);
-
-        $this->assertArrayHasKey(PaymentProviderInterface::class,$interfaces);
+        return new FakePaymentProvider();
     }
 
     public function test_can_retrieve_latest_charges()
@@ -34,19 +33,7 @@ class FakePaymentProviderTest extends TestCase
         $this->assertCount(3,$charges);
     }
 
-    public function test_can_perform_a_charge_based_on_credit_card_token()
-    {
-        $provider = new FakePaymentProvider();
 
-        $provider->charge(new Currency(15,"USD"),"card-token");
-
-        $charge = $provider->getRecentCharges()[0];
-
-        /** @var Currency $currency */
-        $currency = $charge['currency'];
-        $this->assertEquals(15, $currency->amount);
-        $this->assertEquals("USD", $currency->iso_code);
-    }
 
     public function test_can_perform_a_refund_based_on_charge()
     {
