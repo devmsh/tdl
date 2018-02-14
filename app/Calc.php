@@ -14,9 +14,6 @@ class Calc
 
     public function div($int, $int1)
     {
-        if($int1 == 0){
-            return 0;
-        }
         try{
             return $int / $int1;
         }catch (\Exception $e){
