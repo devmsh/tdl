@@ -15,7 +15,7 @@ class Calc
     public function div($int, $int1)
     {
         try{
-            return $int / $int1;
+            return $int / $int1; 
         }catch (\Exception $e){
             return "Nan";
         }
