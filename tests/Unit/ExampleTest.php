@@ -13,6 +13,6 @@ class ExampleTest extends TestCase
         $calc = new Calc();
         $result = $calc->div(10,2);
 
-        $this->assertEquals(5,$result);
+        $this->assertEquals(6,$result);
     }
 }
