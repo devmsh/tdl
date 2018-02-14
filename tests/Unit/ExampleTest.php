@@ -15,4 +15,12 @@ class ExampleTest extends TestCase
 
         $this->assertEquals(5,$result);
     }
+
+    public function test_handel_divide_by_zero()
+    {
+        $calc = new Calc();
+        $result = $calc->div(10,0);
+
+        $this->assertEquals("Nan",$result);
+    }
 }
